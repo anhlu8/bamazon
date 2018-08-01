@@ -12,16 +12,16 @@ var connection = mysql.createConnection({
 
 connection.connect(function (err) {
     if (err) throw err;
-
-    function displayProducts() {
-        connection.query("SELECT id, product_name, price FROM products", function (err, res) {
-            if (err) throw err;
-            console.log(res);
-        });
-    }
     displayProducts();
     prompt();
 });
+
+function displayProducts() {
+    connection.query("SELECT id, product_name, price FROM products", function (err, res) {
+            if (err) throw err;
+            console.log(res);
+        });
+}
 
 function prompt() {
     connection.query("SELECT * FROM products", function (err, results) {
@@ -41,17 +41,28 @@ function prompt() {
             ])
             .then(function (res) {
                 var chosenItem;
-                for (var i = 0; i < results.length; i++) {
-                  if (results[i].id === res.id) {
-                    chosenItem = results[i];
-                  }
+                for (var i = 0; i < results.length - 1; i++) {
+                    if (results[i].id == res.id) {
+                        chosenItem = results[i];
+                        //console.log('chosenItem inside if', chosenItem);
+                    }
                 }
-                if (res.id === results[i].id && parseInt(res.quantity) <= results[i].stock_quantity) {
-                    connection.query("UPDATE products WHERE ?", {
-                        stock_quantity: stock_quantity - parseInt(res.quantity)
-                    }, function (error) {
-                        if (error) throw err;
-                        displayProducts();
+                //console.log('looping, on: ', i);
+                //console.log('res', res);
+
+                console.log('chosenItem', chosenItem)
+
+                if (res.id == chosenItem.id && parseInt(res.quantity) <= chosenItem['stock_quantity']) {
+                    // console.log("input ID", res.id)
+                    // console.log('results', results)
+
+
+                    connection.query("UPDATE products SET ? WHERE ?", [{
+                        stock_quantity: chosenItem['stock_quantity'] - parseInt(res.quantity)
+                    }, {
+                        id: res.id
+                    }], function (error) {
+                        if (error) throw error;
                     });
                 } else {
                     console.log("Insufficient quantity!");
