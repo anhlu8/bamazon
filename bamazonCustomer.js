@@ -40,6 +40,7 @@ function prompt() {
                 }
             ])
             .then(function (res) {
+
                 var chosenItem;
                 for (var i = 0; i < results.length - 1; i++) {
                     if (results[i].id == res.id) {
@@ -50,7 +51,7 @@ function prompt() {
                 //console.log('looping, on: ', i);
                 //console.log('res', res);
 
-                console.log('chosenItem', chosenItem)
+                // console.log('chosenItem', chosenItem);
 
                 if (res.id == chosenItem.id && parseInt(res.quantity) <= chosenItem['stock_quantity']) {
                     // console.log("input ID", res.id)
