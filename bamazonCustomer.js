@@ -18,9 +18,9 @@ connection.connect(function (err) {
 
 function displayProducts() {
     connection.query("SELECT id, product_name, price FROM products", function (err, res) {
-            if (err) throw err;
-            console.log(res);
-        });
+        if (err) throw err;
+        console.log(res);
+    });
 }
 
 function prompt() {
@@ -63,6 +63,9 @@ function prompt() {
                         id: res.id
                     }], function (error) {
                         if (error) throw error;
+                        displayProducts();
+                        prompt();
+
                     });
                 } else {
                     console.log("Insufficient quantity!");
