@@ -1,6 +1,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var key = require("./password.js");
+var Table = require("terminal-table");
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -37,15 +38,22 @@ function options() {
 function viewProducts() {
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
-        console.log(res);
+        var t = new Table({
+            horizontalLine: true,
+            width: ["10%", "30%", "30%", "20%", "10%"],
+
+        });
+        t.push(["id", "product name", "department name", "price", "quantity"]);
+        for (var item in res) {
+            t.push([res[item].id, res[item].product_name, res[item].department_name, res[item].price, res[item].stock_quantity]);
+        }
+        console.log("" + t);
         options();
     });
 }
 
 function viewInventory() {
-    connection.query("SELECT * FROM products where ?", {
-        stock_quantity: 5
-    }, function (err, res) {
+    connection.query("SELECT * FROM products where stock_quantity < 5", function (err, res) {
         if (err) throw err;
         console.log(res);
         options();
@@ -72,19 +80,20 @@ function addToInventory() {
                 for (var i = 0; i < results.length - 1; i++) {
                     if (results[i].id == res.id) {
                         chosenItem = results[i];
-                        connection.query("UPDATE products SET ? WHERE ?", [
-                            {
-                                stock_quantity: chosenItem['stock_quantity'] + parseInt(res.quantity)
-                            },
-                            {
-                                id: res.id
-                            }
-                        ], function (error, res) {
-                            if (error) throw error;
-                            options();
-                        });
+
                     }
                 }
+                connection.query("UPDATE products SET ? WHERE ?", [{
+                        stock_quantity: chosenItem['stock_quantity'] + parseInt(res.quantity)
+                    },
+                    {
+                        id: res.id
+                    }
+                ], function (error, res) {
+                    if (error) throw error;
+                    console.log("Item updated!")
+                    options();
+                });
             });
     });
 }

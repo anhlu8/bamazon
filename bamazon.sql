@@ -18,6 +18,7 @@ INSERT INTO products (product_name, department_name, price, stock_quantity) VALU
 INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES ("Luggage", "Travel", 120, 29);
 INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES ("Coach Purse", "Handbags", 125.99, 30);
 INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES ("Aldo Shoes", "Shoes", 145.99, 10);
+INSERT INTO products (product_name, department_name, price, stock_quantity) VALUES ("Book", "Book", 50, 4);
 
 DELETE FROM products where id = 1;
 

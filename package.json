@@ -19,6 +19,7 @@
   "dependencies": {
     "inquirer": "^6.0.0",
     "mysql": "^2.16.0",
-    "npm": "^6.2.0"
+    "npm": "^6.2.0",
+    "terminal-table": "0.0.12"
   }
 }
